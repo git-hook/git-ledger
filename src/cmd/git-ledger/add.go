@@ -2,11 +2,11 @@ package main
 
 import (
 	"fmt"
+	"regexp"
 	"strings"
 
 	"github.com/urfave/cli"
-	// "github.com/BurntSushi/toml"
-	"github.com/ericcrosson/git-ledger/src/git-ledger"
+	"github.com/git-hook/git-ledger/src/git-ledger"
 	"github.com/codeskyblue/go-sh"
 )
 
@@ -23,12 +23,14 @@ func getRemote(dir string) string {
 func getSlug(dir string) string {
 	session := sh.NewSession()
 	session.SetDir(dir)
-	out, err := session.Command("git", "remote", "get-url", getRemote(dir)).Command("sed", "-r", "s#[^/:]*/##").Output()
+	out, err := session.Command("git", "remote", "get-url", getRemote(dir)).Output()
 	output := strings.TrimSpace(fmt.Sprintf("%s", out))
+	reg := regexp.MustCompile(`[^/:]*/[^/:]*$`)
+	res := reg.FindStringSubmatch(output)
 	if err != nil {
 		panic(err)
 	}
-	return output
+	return res[0]
 }
 
 func add(c *cli.Context) error {
@@ -43,6 +45,9 @@ func add(c *cli.Context) error {
 
 	fmt.Println("record is ", record)
 	fmt.Println("path is ", ledger.Path())
+
+	record.RemoveFromLedger()
+	record.WriteToLedger()
 
 	return nil
 }
