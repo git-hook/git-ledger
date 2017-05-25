@@ -43,20 +43,12 @@ func GetRecords() ([]Record, error) {
 
 func GetBySlug(slug string) (Record, error) {
 	var match Record
-	var ledger Records
 
-	// TODO: use getrecords
-	b, err := ioutil.ReadFile(Path())
+	records, err := GetRecords()
 	if err != nil {
 		return match, err
 	}
-	str := string(b)
-
-	if _, err := toml.Decode(str, &ledger); err != nil {
-		return match, err
-	}
-
-	for _, r := range ledger.Record {
+	for _, r := range records {
 		if strings.Contains(r.Slug, slug) {
 			return r, nil
 		}
@@ -71,19 +63,13 @@ func (r Record) String() string {
 
 // comparison by Path
 func (r Record) RemoveFromLedger() error {
-	b, err := ioutil.ReadFile(Path())
+	records, err := GetRecords()
 	if err != nil {
-		return err
-	}
-	str := string(b)
-
-	var ledger Records
-	if _, err := toml.Decode(str, &ledger); err != nil {
 		return err
 	}
 
 	var content string
-	for _, s := range ledger.Record {
+	for _, s := range records {
 		if s.Path != r.Path {
 			content = content + s.String() + "\n"
 		}

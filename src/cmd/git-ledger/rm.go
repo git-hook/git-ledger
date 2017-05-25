@@ -12,7 +12,6 @@ import (
 
 // TODO: set exit code (project-wide)
 func rm(c *cli.Context) error {
-	fmt.Println("I am in rm!")
 	slug := c.Args().First()
 
 	record, err := ledger.GetBySlug(slug)
