@@ -1,13 +1,17 @@
 package main
 
+// TODO: test
+// TODO: doxygenize
+
 import (
 	"fmt"
 	"regexp"
 	"strings"
+	"path/filepath"
 
 	"github.com/urfave/cli"
-	"github.com/git-hook/git-ledger/src/git-ledger"
 	"github.com/codeskyblue/go-sh"
+	"github.com/git-hook/git-ledger/src/git-ledger"
 )
 
 func getRemote(dir string) string {
@@ -34,20 +38,23 @@ func getSlug(dir string) string {
 }
 
 func add(c *cli.Context) error {
+	// TODO: print message to user
 	fmt.Println("I am in add!")
 	// Default: add cwd to toml
 	project := c.Args().First()
 
+	// TODO: ensure project contains a '.git' directory
+
 	// TODO: clean up this declaration
 	var record ledger.Record
-	record.Path = project
+	record.Path, _ = filepath.Abs(project)
 	record.Slug = getSlug(project)
 
 	fmt.Println("record is ", record)
 	fmt.Println("path is ", ledger.Path())
 
 	record.RemoveFromLedger()
-	record.WriteToLedger()
+	record.AddToLedger()
 
 	return nil
 }

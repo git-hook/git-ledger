@@ -4,6 +4,8 @@ import (
 	"os"
 	"fmt"
 	"path"
+	"errors"
+	"strings"
 	"io/ioutil"
 
 	"github.com/jmalloc/grit/src/grit/pathutil"
@@ -24,20 +26,60 @@ func Path() string {
 	return path.Join(home, ".git-ledger")
 }
 
+func GetRecords() ([]Record, error) {
+	var ledger Records
+
+	b, err := ioutil.ReadFile(Path())
+	if err != nil {
+		return ledger.Record, err
+	}
+	str := string(b)
+
+	if _, err := toml.Decode(str, &ledger); err != nil {
+		return ledger.Record, err
+	}
+	return ledger.Record, err
+}
+
+func GetBySlug(slug string) (Record, error) {
+	var match Record
+	var ledger Records
+
+	// TODO: use getrecords
+	b, err := ioutil.ReadFile(Path())
+	if err != nil {
+		return match, err
+	}
+	str := string(b)
+
+	if _, err := toml.Decode(str, &ledger); err != nil {
+		return match, err
+	}
+
+	for _, r := range ledger.Record {
+		if strings.Contains(r.Slug, slug) {
+			return r, nil
+		}
+	}
+	return match, errors.New(fmt.Sprintf("Unknown project: %s", slug))
+}
+
+// fixme: remove duplicated code
 func (r Record) String() string {
 	return fmt.Sprintf("[[Record]]\npath = \"%s\"\nslug = \"%s\"\n\n", r.Path, r.Slug)
 }
 
-func (r Record) RemoveFromLedger() {
+// comparison by Path
+func (r Record) RemoveFromLedger() error {
 	b, err := ioutil.ReadFile(Path())
 	if err != nil {
-		fmt.Println(err)
+		return err
 	}
 	str := string(b)
 
 	var ledger Records
 	if _, err := toml.Decode(str, &ledger); err != nil {
-		panic(err)
+		return err
 	}
 
 	var content string
@@ -48,10 +90,10 @@ func (r Record) RemoveFromLedger() {
 	}
 
 	ioutil.WriteFile(Path(), []byte(content), 0644)
-
+	return nil
 }
 
-func (r Record) WriteToLedger() {
+func (r Record) AddToLedger() {
 	f, err := os.OpenFile(Path(), os.O_APPEND|os.O_WRONLY|os.O_CREATE, 0644)
 	if err != nil {
 		panic(err)

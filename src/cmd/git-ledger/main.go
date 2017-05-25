@@ -2,10 +2,8 @@ package main
 
 import (
 	"os"
-	"fmt"
 
 	"github.com/Masterminds/semver"
-	"github.com/jmalloc/grit/src/grit/pathutil"
 	"github.com/urfave/cli"
 )
 
@@ -14,10 +12,9 @@ var VERSION = semver.MustParse("0.0.0")
 func main () {
 
 	app := cli.NewApp()
-	homeDir, _ := pathutil.HomeDir()
 
-	app.Name = "grip"
-	app.Usage = "Index your Git clones."
+	app.Name = "git-ledger"
+	app.Usage = "Index your git clones."
 	app.Version = VERSION.String()
 
 	app.Commands = []cli.Command {
@@ -36,7 +33,7 @@ func main () {
 		{
 			Name:   "ls",
 			Usage:  "Print all tracked repositories",
-			Action: find,
+			Action: ls,
 		},
 		{
 			Name:   "rm",
@@ -45,8 +42,6 @@ func main () {
 			Action: rm,
 		},
 	}
-
-	fmt.Println("Made it here with homeDir ", homeDir)
 
 	if err := app.Run(os.Args); err != nil {
 		os.Exit(1)
