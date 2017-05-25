@@ -1,3 +1,5 @@
+// Package ledger provides primitives for operating on the user's
+// git-ledger.
 package ledger
 
 import (
@@ -12,22 +14,34 @@ import (
 	"github.com/BurntSushi/toml"
 )
 
+// Record entry in the git-ledger.
 type Record struct {
 	Path string
 	Slug string
 }
 
-type Records struct {
+// Struct of Records, for toml parsing.
+type records struct {
 	Record []Record
 }
 
+// Get the path of the git-ledger.
 func Path() string {
 	home, _ := pathutil.HomeDir()
 	return path.Join(home, ".git-ledger")
 }
 
+// Return true if dir contains a .git directory.
+func IsGitProject(dir string) bool {
+	stat, err := os.Stat(path.Join(dir, ".git"))
+	isProject := err == nil && stat.IsDir()
+	return isProject
+}
+
+
+// Get a list of records currently in the git-ledger.
 func GetRecords() ([]Record, error) {
-	var ledger Records
+	var ledger records
 
 	b, err := ioutil.ReadFile(Path())
 	if err != nil {
@@ -41,6 +55,7 @@ func GetRecords() ([]Record, error) {
 	return ledger.Record, err
 }
 
+// Look-up a record from the git-ledger by slug.
 func GetBySlug(slug string) (Record, error) {
 	var match Record
 
@@ -56,12 +71,29 @@ func GetBySlug(slug string) (Record, error) {
 	return match, errors.New(fmt.Sprintf("Unknown project: %s", slug))
 }
 
-// fixme: remove duplicated code
+// Look-up a record from the git-ledger by path.
+func GetByPath(path string) (Record, error) {
+	var match Record
+
+	records, err := GetRecords()
+	if err != nil {
+		return match, err
+	}
+	for _, r := range records {
+		if r.Path == path {
+			return r, nil
+		}
+	}
+	return match, errors.New(fmt.Sprintf("Unknown project: %s", path))
+}
+
+// Return the current record as a toml string.
 func (r Record) String() string {
 	return fmt.Sprintf("[[Record]]\npath = \"%s\"\nslug = \"%s\"\n\n", r.Path, r.Slug)
 }
 
-// comparison by Path
+// Remove record from the git-ledger.  Will remove all records
+// matching this records path from the ledger.
 func (r Record) RemoveFromLedger() error {
 	records, err := GetRecords()
 	if err != nil {
@@ -79,6 +111,7 @@ func (r Record) RemoveFromLedger() error {
 	return nil
 }
 
+// Add record to the git-ledger.
 func (r Record) AddToLedger() {
 	f, err := os.OpenFile(Path(), os.O_APPEND|os.O_WRONLY|os.O_CREATE, 0644)
 	if err != nil {

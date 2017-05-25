@@ -21,13 +21,13 @@ func main () {
 		{
 			Name:   "add",
 			Usage:  "Start tracking an existing repository.",
-			ArgsUsage: "[<path>]",
+			ArgsUsage: "[path]",
 			Action: add,
 		},
 		{
 			Name:   "find",
 			Usage:  "Print the location of a tracked repository.",
-			ArgsUsage: "[<path>]",
+			ArgsUsage: "[path]",
 			Action: find,
 		},
 		{
@@ -38,7 +38,7 @@ func main () {
 		{
 			Name:   "rm",
 			Usage:  "Stop tracking an existing repository.",
-			ArgsUsage: "[<path>]",
+			ArgsUsage: "[path]",
 			Action: rm,
 		},
 	}
