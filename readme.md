@@ -7,12 +7,17 @@ location of git-repositories on local filesystems.
 
 ## Install
 
-WIP
+To install the library
+
 ```bash
 go get github.com/git-hook/git-ledger
-cd $GOPATH/src/github.com/git-hook/git-ledger
-go build .
-go get .
+```
+
+To install the binary
+
+```bash
+go get github.com/git-hook/git-ledger/cmd/git-ledger
+git ledger add .
 ```
 
 ## API
