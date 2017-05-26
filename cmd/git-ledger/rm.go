@@ -1,12 +1,12 @@
 package main
 
 import (
-	"os"
 	"fmt"
+	"os"
 	"path/filepath"
 
-	"github.com/urfave/cli"
 	"github.com/git-hook/git-ledger"
+	"github.com/urfave/cli"
 )
 
 // Remove specified path or slug from the ledger.

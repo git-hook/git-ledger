@@ -9,7 +9,7 @@ import (
 
 var VERSION = semver.MustParse("0.1.0")
 
-func main () {
+func main() {
 
 	app := cli.NewApp()
 
@@ -17,18 +17,18 @@ func main () {
 	app.Usage = "Index your git clones."
 	app.Version = VERSION.String()
 
-	app.Commands = []cli.Command {
+	app.Commands = []cli.Command{
 		{
-			Name:   "add",
-			Usage:  "Start tracking an existing repository.",
+			Name:      "add",
+			Usage:     "Start tracking an existing repository.",
 			ArgsUsage: "[path]",
-			Action: add,
+			Action:    add,
 		},
 		{
-			Name:   "find",
-			Usage:  "Print the location of a tracked repository.",
+			Name:      "find",
+			Usage:     "Print the location of a tracked repository.",
 			ArgsUsage: "[path]",
-			Action: find,
+			Action:    find,
 		},
 		{
 			Name:   "ls",
@@ -36,10 +36,10 @@ func main () {
 			Action: ls,
 		},
 		{
-			Name:   "rm",
-			Usage:  "Stop tracking an existing repository.",
+			Name:      "rm",
+			Usage:     "Stop tracking an existing repository.",
 			ArgsUsage: "[path]",
-			Action: rm,
+			Action:    rm,
 		},
 	}
 

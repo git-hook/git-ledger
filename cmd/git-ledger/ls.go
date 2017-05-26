@@ -1,11 +1,11 @@
 package main
 
 import (
-	"os"
 	"fmt"
+	"os"
 
-	"github.com/urfave/cli"
 	"github.com/git-hook/git-ledger"
+	"github.com/urfave/cli"
 )
 
 // List all records in the git-ledger.

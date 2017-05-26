@@ -1,16 +1,16 @@
 package main
 
 import (
-	"os"
-	"fmt"
 	"errors"
+	"fmt"
+	"os"
+	"path/filepath"
 	"regexp"
 	"strings"
-	"path/filepath"
 
-	"github.com/urfave/cli"
 	"github.com/codeskyblue/go-sh"
 	"github.com/git-hook/git-ledger"
+	"github.com/urfave/cli"
 )
 
 // Get remote of the first remote listed by `git remote` for project.

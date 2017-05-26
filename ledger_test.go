@@ -1,8 +1,8 @@
 package ledger
 
 import (
-	"os"
 	"fmt"
+	"os"
 	"path"
 	"testing"
 )
@@ -31,7 +31,6 @@ func TestIsGitProject(t *testing.T) {
 			"got", result,
 		)
 	}
-
 
 	// remove dir and test for false
 	os.Remove(gitdir)
@@ -73,7 +72,7 @@ func popGitLedger() {
 	os.Rename(fmt.Sprintf("%s.backup", Path()), Path())
 }
 
-func TestGetRecordsEmpty( t *testing.T) {
+func TestGetRecordsEmpty(t *testing.T) {
 	pushGitLedger()
 	records, _ := GetRecords()
 	if len(records) != 0 {

@@ -3,15 +3,15 @@
 package ledger
 
 import (
-	"os"
-	"fmt"
-	"path"
 	"errors"
-	"strings"
+	"fmt"
 	"io/ioutil"
+	"os"
+	"path"
+	"strings"
 
-	"github.com/jmalloc/grit/src/grit/pathutil"
 	"github.com/BurntSushi/toml"
+	"github.com/jmalloc/grit/src/grit/pathutil"
 )
 
 // Record entry in the git-ledger.
