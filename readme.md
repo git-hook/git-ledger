@@ -1,4 +1,4 @@
-# git-ledger
+# git-ledger [![Build Status](https://travis-ci.org/git-hook/git-ledger.svg?branch=master)](https://travis-ci.org/git-hook/git-ledger)
 
 > Track your local git clones
 
