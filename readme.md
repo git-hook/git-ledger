@@ -22,11 +22,11 @@ git ledger add .
 
 ## API
 
-### add [path-or-slug]
+### add [path]
 
 Start tracking an existing repository.
 
-### find [path-or-slug]
+### find [slug]
 
 Print the location of a tracked repository.
 
