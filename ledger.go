@@ -38,7 +38,6 @@ func IsGitProject(dir string) bool {
 	return isProject
 }
 
-
 // Get a list of records currently in the git-ledger.
 func GetRecords() ([]Record, error) {
 	var ledger records
