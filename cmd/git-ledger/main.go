@@ -7,7 +7,7 @@ import (
 	"github.com/urfave/cli"
 )
 
-var VERSION = semver.MustParse("0.1.0")
+var VERSION = semver.MustParse("0.1.1")
 
 func main() {
 

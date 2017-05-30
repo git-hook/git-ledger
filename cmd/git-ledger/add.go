@@ -32,7 +32,7 @@ func getSlug(project string) (string, error) {
 	}
 	session := sh.NewSession()
 	session.SetDir(project)
-	out, err := session.Command("git", "remote", "get-url", getRemote(project)).Output()
+	out, err := session.Command("git", "remote", "show", "-n", getRemote(project)).Command("grep", "Fetch").Output()
 	if err != nil {
 		return "", err
 	}
