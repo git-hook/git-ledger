@@ -1,5 +1,5 @@
 install:
-	go install ./...
+	go get ./...
 
 test: install
 	go test -v
@@ -9,3 +9,6 @@ fmt:
 
 tags:
 	find ./ -name '*.go' -print0 | xargs -0 gotags > TAGS
+
+push:
+	git push origin master
