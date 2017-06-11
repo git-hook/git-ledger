@@ -2,7 +2,7 @@ install:
 	go get ./...
 
 test: install
-	go test -v
+	ginkgo -v
 
 fmt:
 	gofmt -w *.go */**/*.go
