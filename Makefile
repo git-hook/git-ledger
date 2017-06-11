@@ -2,6 +2,8 @@ install:
 	go get ./...
 
 test: install
+	go get github.com/onsi/ginkgo/ginkgo
+	go get github.com/onsi/gomega
 	ginkgo -v
 
 fmt:
