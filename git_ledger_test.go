@@ -20,6 +20,7 @@ func pushGitLedger() {
 
 // Remove the temporary git-ledger and replace it with the backup
 func popGitLedger() {
+	os.Remove(Path())
 	os.Rename(fmt.Sprintf("%s.backup", Path()), Path())
 }
 
