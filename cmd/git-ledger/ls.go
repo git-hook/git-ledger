@@ -20,9 +20,5 @@ func ls(c *cli.Context) error {
 		fmt.Println(fmt.Sprintf("%s: %s", rec.Slug, rec.Path))
 	}
 
-	// Ledger is empty
-	if len(records) == 0 {
-		fmt.Fprintf(os.Stderr, "Ledger is empty\n")
-	}
 	return nil
 }
