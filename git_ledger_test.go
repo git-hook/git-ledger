@@ -86,6 +86,12 @@ var _ = Describe("GitLedger", func() {
 		Specify("should reside in the user's home directory", func() {
 			Expect(path.Join(os.Getenv("HOME"), ".git-ledger")).To(Equal(Path()))
 		})
+		Specify("should be created if it is accessed and it does not exist", func() {
+			os.Remove(Path())
+			records, err := GetRecords()
+			Expect(err).To(BeNil())
+			Expect(len(records)).To(Equal(0))
+		})
 	})
 
 	Describe("Records", func() {

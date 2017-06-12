@@ -39,19 +39,25 @@ func IsGitProject(dir string) bool {
 }
 
 // Get a list of records currently in the git-ledger.
-func GetRecords() ([]Record, error) {
-	var ledger records
+func GetRecords() (record []Record, err error) {
+	if _, err = os.Stat(Path()); os.IsNotExist(err) {
+		os.OpenFile(Path(), os.O_RDONLY|os.O_CREATE, 0644)
+	}
 
-	b, err := ioutil.ReadFile(Path())
+	var b []byte
+	b, err = ioutil.ReadFile(Path())
 	if err != nil {
-		return ledger.Record, err
+		return
 	}
 	str := string(b)
 
-	if _, err := toml.Decode(str, &ledger); err != nil {
-		return ledger.Record, err
+	var ledger records
+	if _, err = toml.Decode(str, &ledger); err != nil {
+		return
 	}
-	return ledger.Record, err
+
+	record = ledger.Record
+	return
 }
 
 // Look-up a record from the git-ledger by slug.
