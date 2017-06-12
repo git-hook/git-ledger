@@ -10,6 +10,12 @@ import (
 	"fmt"
 	"path"
 )
+
+var (
+	r Record
+	s Record
+)
+
 // Move the current git-ledger to a new location so testing can create
 // a temporary one
 func pushGitLedger() {
@@ -31,11 +37,6 @@ func createDummyLedger() {
 	s = Record{Path: "/home", Slug: "badger/bear"}
 	s.AddToLedger()
 }
-
-var (
-	r Record
-	s Record
-)
 
 var _ = Describe("GitLedger", func() {
 
@@ -121,7 +122,7 @@ var _ = Describe("GitLedger", func() {
 			rec, _ = GetByPath("/home")
 			Expect(rec).To(Equal(s))
 			_, err := GetByPath("DNE")
-			Expect(err).ToNot(BeNil())
+			Ω(err).ShouldNot(BeNil())
 		})
 	})
 
