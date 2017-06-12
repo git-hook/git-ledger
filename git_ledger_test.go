@@ -27,13 +27,8 @@ func popGitLedger() {
 func createDummyLedger() {
 	r = Record{Path: "/tmp", Slug: "pony/fill"}
 	r.AddToLedger()
-	records, _ := GetRecords()
-	Expect(len(records) == 1)
-
 	s = Record{Path: "/home", Slug: "badger/bear"}
 	s.AddToLedger()
-	records, _ = GetRecords()
-	Expect(len(records) == 2)
 }
 
 var (
@@ -53,14 +48,14 @@ var _ = Describe("GitLedger", func() {
 
 	Describe("CLI", func() {
 		Context("add", func() {
+			// TODO: test about duplicates
 			Specify("should accept fully-initialized records", func() {
-				Record{Path: "/tmp", Slug: "pony/fill"}.AddToLedger()
+				Record{Path: "/proc", Slug: "tron/man"}.AddToLedger()
 				records, _ := GetRecords()
-				Expect(len(records) == 1)
-
-				Record{Path: "/home", Slug: "badger/bear"}.AddToLedger()
+				Expect(len(records)).To(Equal(3))
+				Record{Path: "/dev", Slug: "cron/man"}.AddToLedger()
 				records, _ = GetRecords()
-				Expect(len(records) == 2)
+				Expect(len(records)).To(Equal(4))
 			})
 		})
 
@@ -68,10 +63,10 @@ var _ = Describe("GitLedger", func() {
 			Specify("should accept fully-initialized records", func() {
 				s.RemoveFromLedger()
 				records, _ := GetRecords()
-				Expect(len(records) == 1)
+				Expect(len(records)).To(Equal(1))
 				r.RemoveFromLedger()
 				records, _ = GetRecords()
-				Expect(len(records) == 0)
+				Expect(len(records)).To(Equal(0))
 			})
 		})
 
@@ -87,7 +82,7 @@ var _ = Describe("GitLedger", func() {
 
 	Context("The ledger", func() {
 		Specify("should reside in the user's home directory", func() {
-			Expect(path.Join(os.Getenv("HOME"), ".git-ledger") == Path())
+			Expect(path.Join(os.Getenv("HOME"), ".git-ledger")).To(Equal(Path()))
 		})
 	})
 
@@ -95,8 +90,9 @@ var _ = Describe("GitLedger", func() {
 
 		Context("When the ledger is empty", func() {
 			It("should return 0 records", func() {
+				os.Remove(Path())
 				records, _ := GetRecords()
-				Expect(len(records) == 0)
+				Expect(len(records)).To(Equal(0))
 			})
 		})
 
@@ -106,25 +102,25 @@ var _ = Describe("GitLedger", func() {
 			slug := "sclopio/peepio"
 			record := Record{Path: path, Slug: slug}
 			expected := fmt.Sprintf("[[Record]]\npath = \"%s\"\nslug = \"%s\"\n\n", record.Path, record.Slug)
-			Expect(record.String() == expected)
+			Expect(record.String()).To(Equal(expected))
 		})
 
 		Specify("should be index-able by slug", func() {
 			rec, _ := GetBySlug("fill")
-			Expect(rec == r)
+			Expect(rec).To(Equal(r))
 			rec, _ = GetBySlug("pony/fill")
-			Expect(rec == r)
+			Expect(rec).To(Equal(r))
 			rec, _ = GetBySlug("badger")
-			Expect(rec == s)
+			Expect(rec).To(Equal(s))
 		})
 
 		Specify("should be index-able by path", func() {
-			rec, _ := GetBySlug("/tmp")
-			Expect(rec == r)
-			rec, _ = GetBySlug("/home")
-			Expect(rec == s)
-			_, err := GetBySlug("DNE")
-			Expect(err != nil)
+			rec, _ := GetByPath("/tmp")
+			Expect(rec).To(Equal(r))
+			rec, _ = GetByPath("/home")
+			Expect(rec).To(Equal(s))
+			_, err := GetByPath("DNE")
+			Expect(err).ToNot(BeNil())
 		})
 	})
 
@@ -146,11 +142,11 @@ var _ = Describe("GitLedger", func() {
 
 			Specify("should identify as such", func() {
 				os.MkdirAll(gitdir, os.ModePerm)
-				Expect(IsGitProject(dir))
+				Ω(IsGitProject(dir)).Should(BeTrue())
 			})
 
 			Specify("should be differentiable from non-git repositories", func() {
-				Expect(!IsGitProject(dir))
+				Ω(IsGitProject(dir)).Should(BeFalse())
 			})
 		})
 	})
